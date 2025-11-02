@@ -3,41 +3,141 @@
 <head>
   <title>Gemini Injector</title>
   <style>
-    body { font-family: sans-serif; width: 350px; padding: 10px; }
-    h3 { margin-top: 0; }
-    .setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-    
-    /* Simple Toggle Switch CSS */
+    /* VARIABLES */
+    :root {
+      --bg-dark: #1e1e1e;
+      --bg-medium: #2d2d2d;
+      --text-light: #ffffff;
+      --accent-blue: #0078d7; /* Modern Microsoft Blue */
+      --active-bg: #0078d720; /* Light blue tint for active item */
+      --border-color: #3e3e3e;
+      --danger-red: #ff4545;
+    }
+
+    /* GENERAL STYLES */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      width: 380px; /* Slightly wider panel */
+      padding: 15px;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+    }
+    h3, h4 {
+      color: var(--text-light);
+      margin-top: 5px;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid var(--border-color);
+      margin: 15px 0;
+    }
+
+    /* TOGGLE ROW */
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 5px;
+      border-radius: 4px;
+      background-color: var(--bg-medium);
+    }
+
+    /* TOGGLE SWITCH CSS (Improved Dark Theme) */
     .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
     .switch input { opacity: 0; width: 0; height: 0; }
-    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px; }
-    .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-    input:checked + .slider { background-color: #2196F3; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #555;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px; width: 16px; left: 4px; bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider { background-color: var(--accent-blue); }
     input:checked + .slider:before { transform: translateX(26px); }
 
-    /* Preset List */
-    #preset-list { margin-top: 10px; max-height: 200px; overflow-y: auto; }
-    .preset-item { display: flex; align-items: center; justify-content: space-between; padding: 8px; border-bottom: 1px solid #eee; }
-    .preset-item.active { background-color: #e6f7ff; }
-    .preset-name { font-weight: bold; cursor: pointer; flex-grow: 1; }
-    .preset-actions button { font-size: 14px; padding: 4px 6px; margin-left: 5px; cursor: pointer; }
-    #add-new { width: 100%; padding: 8px; margin-top: 10px; }
+    /* PRESET LIST */
+    #preset-list {
+      margin-top: 10px;
+      max-height: 250px;
+      overflow-y: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      background-color: var(--bg-medium);
+      padding: 0;
+    }
+    .preset-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.2s;
+    }
+    .preset-item:last-child {
+      border-bottom: none;
+    }
+    .preset-item:hover:not(.active) {
+      background-color: var(--bg-medium); /* Darken slightly on hover */
+      cursor: pointer;
+    }
+    .preset-item.active {
+      background-color: var(--active-bg);
+      border-left: 4px solid var(--accent-blue); /* Highlight the active item */
+      padding-left: 6px;
+    }
+    .preset-name {
+      font-weight: 500;
+      cursor: pointer;
+      flex-grow: 1;
+      color: var(--text-light);
+    }
+    .preset-actions button {
+      font-size: 14px;
+      padding: 5px 8px;
+      margin-left: 5px;
+      cursor: pointer;
+      background-color: transparent;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--text-light);
+      transition: all 0.2s;
+    }
+    .preset-actions button:hover {
+      background-color: #444;
+    }
+    .preset-actions .delete-button:hover {
+        background-color: var(--danger-red);
+        border-color: var(--danger-red);
+    }
+
+    /* ADD NEW BUTTON */
+    #add-new {
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
+      background-color: var(--accent-blue);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+    #add-new:hover {
+      background-color: #005a9e; /* Darker blue on hover */
+    }
   </style>
 </head>
 <body>
-  <div class="setting-row">
-    <h3>Enable Injection</h3>
-    <label class="switch">
-      <input type="checkbox" id="global-toggle">
-      <span class="slider"></span>
-    </label>
-  </div>
-  <hr>
-  <h4>Presets</h4>
-  <div id="preset-list">
-    </div>
-  <button id="add-new">Add New Preset</button>
-
-  <script src="popup.js"></script>
-</body>
-</html>
